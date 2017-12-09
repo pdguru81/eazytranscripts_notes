@@ -6,7 +6,10 @@ Please head over to [url coming soon] for an idea of what this application curre
 3. create a docker-compose file using the template I have defined here below. I stronly recommend this approach as the system relies on the existence of envioronment variables that must be defined in these files.
 4. Run 'docker-compose up' to get the application running.
 
-Sample content of the docker-compose` file.
+Sample content of the docker-compose` file. Please use this to get started. Note that you must:
+
+1) Create an nginx config in the following folders server/conf.d/
+2) put the data needed to run this system in some folder and replace /Users/pabel/Desktop/data with that.
 This gets an EazyTranscript image to run in a container that uses
 environment variabes that have been set  in a <Filename>.env file also described below.
 
