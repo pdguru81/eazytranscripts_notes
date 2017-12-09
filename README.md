@@ -13,17 +13,39 @@ environment variabes that have been set  in a <Filename>.env file also described
 ```
 version: '3'
 services:
+  server:
+    restart: always
+    image: nginx
+    volumes:
+      - ./server/conf.d:/etc/nginx/conf.d
+      - static-assets:/usr/share/nginx/html/
+    depends_on:
+      - web
+    links:
+      - web
+    ports:
+      - "80:80"
   web:
     image: pdguru81/eazytranscripts:latest
-    ports:
-     - "5000:5000"
+    expose:
+      - "8000"
     env_file:
      - eazytranscripts.env
+    volumes:
+      - /Users/pabel/Desktop/data:/data
+      - static-assets:/home/root/static
+    command: gunicorn -c gunicorn.conf.py  -b :8000 -p PIDFILE  start:app --log-level=debug 
+
+volumes:
+  static-assets:
 ```
 
 Required Environment Variables.
 This should be set in a <filename>.env file that should exist in the same folder as 
-the docker-compose.yml file for simplicity.
+the docker-compose.yml file for simplicity. All the fields are required. DATA_DIRECTORY
+below is the folder with all the data needed to run the application. It must also contain
+an image of the signature of the current registra at your school and an image of the 
+school logo that will be used in the transcript.
 
 ```
 SECERET_KEY='YOUR OWN SECRET KEY. A LONG STRING OF RANDOM CHARACTERS'
@@ -35,13 +57,13 @@ MAIL_USE_TLS=True 'This value is fixed to True for now.'
 MAIL_USERNAME='set your email username for the account used for sending emails'
 MAIL_PASSWORD='set password for the account used for sending emails'
 MAIL_DEFAULT_SENDER='Actual email address for sending emails.'
-USE_DATABASE= 'True or False to use the database service you have installed using docker-compose'
-DATABASE_PASSWORD='password of the database system to be used'
-DATABASE_USER='The database user to be used with this application'
-HOST='The application host name or ip.'
-DOCKER_PORT=5000 #must match the value used in docker compose
-EXPOSED_PORT=5000 #must match the value used in docker compose
-HTTP_SCHEME="http"
 EAZY_TRANSCRIPT_ENVIRONMENT="Application environment. Could be set to `local` or `prod`"
+ENABLE_PAYMENT=True
+PAYMENT_API_KEY="Flutterwave api key"
+PAYMENT_API_SECRET="Flutterwave api secret"
+PAYMENT_API_HOST="URL to the payment host for sending payment requests"
+TRANSCRIPT_COST=15
+DATA_DIRECTORY="Folder where the data is"
+
 ```
 
