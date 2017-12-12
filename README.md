@@ -1,6 +1,6 @@
 ## Welcome to EazyTranscripts :fire::fire:
 
-Please head over to http://http://45.55.83.205/ for an idea of what this application currently looks like. To run a local instance, you will need to:
+Please head over to http://45.55.83.205/ for an idea of what this application currently looks like. To run a local instance, you will need to:
 1. install docker and docker-compose on your machine and ensure docker is running.
 2. run 'docker pull pdguru81/eazytranscripts' to get an image of the EazyTranscripts application. Please note that the file is ove 800MB in size and as such might take sometime to download.
 3. create a docker-compose file using the template I have defined here below. I stronly recommend this approach as the system relies on the existence of envioronment variables that must be defined in these files.
