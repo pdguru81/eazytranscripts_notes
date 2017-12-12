@@ -3,15 +3,16 @@
 Please head over to http://45.55.83.205/ for an idea of what this application currently looks like. To run a local instance, you will need to:
 1. install docker and docker-compose on your machine and ensure docker is running.
 2. run 'docker pull pdguru81/eazytranscripts' to get an image of the EazyTranscripts application. Please note that the file is ove 800MB in size and as such might take sometime to download.
-3. create a docker-compose file using the template I have defined here below. I stronly recommend this approach as the system relies on the existence of envioronment variables that must be defined in these files.
+3. create a docker-compose file using the template I have defined here below. I stronly recommend this approach as the system relies on the existence of environment variables that must be defined in these files.
 4. Run 'docker-compose up' to get the application running.
 
 Sample content of the docker-compose` file. Please use this to get started. Note that you must:
 
 1) Create an nginx config in the following folders server/conf.d/
-2) put the data needed to run this system in some folder and replace /Users/pabel/Desktop/data with that.
-This gets an EazyTranscript image to run in a container that uses
-environment variabes that have been set  in a <Filename>.env file also described below.
+2) put the data needed to run this system in some folder and replace /Users/pabel/Desktop/data with that folder's path.
+This docker-compose.yml file below gets an EazyTranscript image to run in a container that uses
+environment variabes that have been set  in eazytranscripts.env. The sample contents of eazytranscripts.env is explained in a subsequent section below.
+
 
 ```
 version: '3'
@@ -41,6 +42,30 @@ services:
 
 volumes:
   static-assets:
+```
+Sample nginx config settings:
+```
+server {
+    listen 80;
+    charset utf-8;
+    access_log off;
+
+    location / {
+        proxy_pass http://web:8000;
+        proxy_set_header Host $host:$server_port;
+        proxy_set_header X-Forwarded-Host $server_name;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /static {
+        access_log   off;
+        expires      30d;
+
+        alias /usr/share/nginx/html/;
+    }
+}
+
 ```
 
 Required Environment Variables.
